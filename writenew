@@ -1,0 +1,12 @@
+#!/bin/bash
+if [ $# -lt 1 ]
+then
+	FN=ps2.hex
+else
+	FN=$1
+fi
+
+
+#avrdude -p attiny2313 -P /dev/parport0 -c dapa -U lfuse:w:lfuse.hex:i -U flash:w:${FN}:i
+avrdude -p attiny2313 -P /dev/parport0 -c dapa -U lfuse:w:0xe4:m -U hfuse:w:0xdd:m -U flash:w:${FN}:i
+

@@ -1,0 +1,8 @@
+Code to build a converter that takes a Sega Saturn controller on one end and plugs into a Playstation 1 or 2 on the
+other.
+
+The code is written to build with avra. The 'writenew' script has the fuse settings. sat2ps2.html is an old document
+that shows the pinout and has some other details.
+
+Revision history is messing because it was originally in darcs and isn't worth the trouble to convert. 
+

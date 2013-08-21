@@ -1,0 +1,90 @@
+<html>
+<head>
+	<title>Saturn-PSX Controller Converter</title>
+	<style type="text/css">
+		table { border-collapse: collapse }
+		td { border: solid black 1px ; width: 10em }
+	</style>
+</head>
+
+<body>
+	<p>I thought writing this would be easier than pulling apart a saturn
+	pad and sticking in the guts of a PSX controller. Turns out it probably
+	wasn't. It currently works with real PSX and PS2 hardware, and all the
+	converters I have available for testing ("3 in 1 PC joy box", "Super
+	Dual Box Pro", a generic PS3 converter, and a Gemini GC/Xbox converter).
+	The only known issue is with Ridge Racer Type 4, and may apply to other
+	games that support a negcon. However, Wipeout and Wip3out appear to be
+	fine. If you plug it in at a bad time the PSX may freeze.</p>
+
+	<p>Button mapping is the same as the official PS2 Saturn controller.
+	<table>
+		<tr><th>PSX</th><th>Saturn</th></tr>
+		<tr><td>X</td><td>A</td></tr>
+		<tr><td>Circle</td><td>B</td></tr>
+		<tr><td>Triangle</td><td>X</td></tr>
+		<tr><td>Square</td><td>Y</td></tr>
+		<tr><td>L1</td><td>Z</td></tr>
+		<tr><td>R1</td><td>C</td></tr>
+		<tr><td>L2</td><td>L</td></tr>
+		<tr><td>R2</td><td>R</td></tr>
+		<tr><td>Start</td><td>Start+A</td></tr>
+		<tr><td>Select</td><td>Start+B</td></tr>
+		<tr><td>PS Home (Start + Select + Up)</td><td>Start +
+				C</td></tr>
+	</table>Lag should not be noticeable. The time between the first button
+	being sampled and the final bit being sent out should be under 0.3ms.
+	</p>
+
+	<p>Construction is simple. The core of the converter is an Atmel
+	ATTiny2313 microprocessor. The only other component is a power filter
+	capacitor. A simple programmer for the microprocessor can be found <a
+		href="http://www.instructables.com/id/Ghetto-Programming%3a-Getting-started-with-AVR-micro/">here</a>.
+	The code is designed to run at 8mhz, the internal oscillator is good enough. I have the low fuse set to E4.
+	How to connect everything:
+	<table>
+		<tr><th>Connection</th><th>Pin</th><th>Pin</th><th>Connection</th></tr>
+		<tr><td>NC</td><td>1</td><td>20</td><td>VCC</td></tr>
+		<tr><td>Saturn 5 (S1)</td><td>2</td><td>19</td><td>PSX 7 (SCK)</td></tr>
+		<tr><td>Saturn 4 (S0)</td><td>3</td><td>18</td><td>PSX 1 (DATA)</td></tr>
+		<tr><td>NC</td><td>4</td>           <td>17</td><td>PSX 2 (CMD)</td></tr>
+		<tr><td>NC</td><td>5</td>           <td>16</td><td>PSX 9 (ACK)</td></tr>
+		<tr><td>Saturn 7 (D3)</td><td>6</td><td>15</td><td>PSX 6 (ATT)</td></tr>
+		<tr><td>Saturn 8 (D2)</td><td>7</td><td>14</td><td>NC</td></tr>
+		<tr><td>Saturn 2 (D1)</td><td>8</td><td>13</td><td>NC</td></tr>
+		<tr><td>Saturn 3 (D0)</td><td>9</td><td>12</td><td>NC</td></tr>
+		<tr><td>GND</td><td>10</td><td>11</td><td>NC</td></tr>
+	</table>
+	Connect Saturn 1 (VCC) and 6 (also VCC), PSX 5 (VCC) to VCC. Saturn 9 and PSX 4 go to GND. A
+	filter capacitor (100uf or so) across VCC and GND is not a bad idea, but it seems to work fine without it.
+	The saturn pin numberings are as on <a href="http://www.gamesx.com/controldata/saturn.htm">gamesx</a>. PSX
+	numberings seem to be consistent everywhere, but the pinout is shown at <a href="http://www.curiousinventor.com/guides/ps2">
+	Curious Inventor</a>.</p>
+
+
+	<p>Source for the uC with the layout as above is <a href="ps2.asm">here</a>(BSD license), compiled
+	hex file is <a href="ps2.hex">here</a>. Alternatively, I created a
+	layout that matches the defaults in Capcom games (Z as R1, C as R2, L as
+	L1, R as L2). The source is <a href="ps2_cap.asm">here</a>, the hex file
+	is <a href="ps2_cap.hex">here</a>. Someone else sells pre-made ones <a
+		href="???">aoeu</a>.
+	</p>
+
+	<h1>Resources</h1>
+	<p>
+	<a href="http://www.hardwarebook.info/Sony_Playstation_Controller_Port">Hardwarebook</a>
+	For some pinout and protocol stuff.<br />
+	<a
+		href="http://www.nearfuturelaboratory.com/2008/06/19/playstation2-logic-analysis/">Near
+		Future Laboratory</a>
+	For screenshots of a logic analyser showing the PSX protocol.<br />
+	<a href="http://www.curiousinventor.com/guides/ps2">Curious Inventor</a>
+	For a very detailed description of the PSX protocol<br />
+	<a href="http://www.gamesx.com/controldata/saturn.htm">GameSX</a> For
+	the data on the Saturn controller<br />
+	<a href="http://www.futurlec.com.au">Futurlec</a>, where I bought my
+	parts. Very cheap!<br />
+	</p>
+</body>
+</head>
+
